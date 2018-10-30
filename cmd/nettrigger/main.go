@@ -16,7 +16,7 @@ func main() {
 	c := nettrigger.DefaultConfig
 	if err := c.ParseEnv(); err != nil {
 		fmt.Printf("Configuration Error: %v\n", err)
-		os.Exit(1)
+		return
 	}
 
 	// Parse flags
@@ -82,7 +82,7 @@ func main() {
 	rules, err := nettrigger.BuildRules(c.Rules, filterBuilders, actionBuilders)
 	if err != nil {
 		fmt.Printf("ERROR: %v\n", err)
-		os.Exit(1)
+		return
 	}
 
 	// Capture shutdown signals
