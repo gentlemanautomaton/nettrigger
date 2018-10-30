@@ -102,7 +102,7 @@ func main() {
 			for a, action := range rule.Actions {
 				err := action(ctx, env, prov)
 				if err != nil {
-					fmt.Printf("RULE %d ACTION %d: %v", r+1, a+1, err)
+					fmt.Printf("RULE %d ACTION %d: %v\n", r+1, a+1, err)
 				}
 			}
 		}
