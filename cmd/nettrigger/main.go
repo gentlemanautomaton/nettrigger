@@ -11,14 +11,6 @@ import (
 	"github.com/gentlemanautomaton/signaler"
 )
 
-func usage(messages ...string) {
-	for _, line := range messages {
-		fmt.Println(line)
-	}
-	fmt.Printf("Usage:\n\t%s mac ip host\n", os.Args[0])
-	os.Exit(1)
-}
-
 func main() {
 	// Prepare config from environment
 	c := nettrigger.DefaultConfig
