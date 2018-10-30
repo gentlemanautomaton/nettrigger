@@ -74,7 +74,7 @@ func main() {
 		}
 		fmt.Printf("RULES:\n")
 		for r := range c.Rules {
-			fmt.Printf("[%d]: %v\n", r, c.Rules[r])
+			fmt.Printf("  [%d]: %v\n", r, c.Rules[r])
 		}
 	}
 
