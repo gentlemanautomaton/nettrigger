@@ -52,15 +52,16 @@ This example relies upon the definition of `HOST` and `IP` environment variables
 Rules can be defined via environment variables:
 
 ```
-RULE1=`rule`
-RULE2=`rule`
+RULE1='[rule syntax]'
+RULE2='[rule syntax]'
 ```
 
 Arguments can be mapped to environment variables, using environment variables:
 
 ```
-ARG1=`Host`
-ARG2=`IP`
+ARG1='Host'
+ARG2='IP'
+ARG2='MAC'
 ```
 
 ## Functions
@@ -68,10 +69,10 @@ ARG2=`IP`
 When expanding environment variables, a small set of built-in functions are provided:
 
 ```
-CONCAT(value[, value ...])
+concat(value[, value ...])
 
-SHA2_256(value)
-SHA2_64(value)
+sha2_256(value)
+sha2_64(value)
 ```
 
 ## Providers
@@ -100,9 +101,9 @@ Note that this assumes the existence of `nettrigger` in the `/` root driectory.
 Such an invocation of `nettrigger` would also require its arguments to be mapped:
 
 ```
-ARG1=`HOST`
-ARG2=`IP`
-ARG3=`MAC`
+ARG1='HOST'
+ARG2='IP'
+ARG3='MAC'
 ```
 
 See [this helpful blog post](https://jpmens.net/2011/07/06/execute-a-script-when-isc-dhcp-hands-out-a-new-lease/) by Jan-Piet Mens for additional information about the `on commit` handler.
