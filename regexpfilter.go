@@ -30,10 +30,17 @@ func RegexpBuilder(spec FilterSpec) (Filter, error) {
 		return nil, errors.New("regular expression filter requires a subject and an expression")
 	case 2:
 		subject, expression := spec.Args[0], spec.Args[1]
+
+		// Force case-insensitive matching
+		if !strings.HasPrefix(expression, "(?i)") {
+			expression = "(?i)" + expression
+		}
+
 		re, err := regexp.Compile(expression)
 		if err != nil {
 			return nil, fmt.Errorf("invalid expression \"%s\": %v", expression, err)
 		}
+
 		return regexpFilter{
 			subject: subject,
 			re:      re,
