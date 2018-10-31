@@ -12,6 +12,7 @@ type Config struct {
 	Params            ArgMap
 	Rules             []RuleSpec
 	Timeout           time.Duration
+	GoogleProject     string
 	DigitalOceanToken string
 }
 
@@ -22,12 +23,17 @@ var DefaultConfig = Config{}
 // configuration.
 func (c *Config) ParseEnv() error {
 	var (
-		token, hasToken     = os.LookupEnv("DIGITAL_OCEAN_TOKEN")
-		timeout, hasTimeout = os.LookupEnv("TIMEOUT")
+		googleProject, hasGoogleProject         = os.LookupEnv("GOOGLE_PROJECT")
+		digitalOceanToken, hasDigitalOceanToken = os.LookupEnv("DIGITAL_OCEAN_TOKEN")
+		timeout, hasTimeout                     = os.LookupEnv("TIMEOUT")
 	)
 
-	if hasToken {
-		c.DigitalOceanToken = token
+	if hasGoogleProject {
+		c.GoogleProject = googleProject
+	}
+
+	if hasDigitalOceanToken {
+		c.DigitalOceanToken = digitalOceanToken
 	}
 
 	if hasTimeout {

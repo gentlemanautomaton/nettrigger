@@ -53,7 +53,15 @@ func main() {
 
 	// Providers
 	prov := nettrigger.Providers{}
-	if c.DigitalOceanToken != "" {
+	switch {
+	case c.GoogleProject != "":
+		var err error
+		prov.DNS, err = nettrigger.NewGoogleDNS(c.GoogleProject)
+		if err != nil {
+			fmt.Printf("ERROR: %v\n", err)
+			return
+		}
+	case c.DigitalOceanToken != "":
 		prov.DNS = nettrigger.NewDigitalOceanDNS(c.DigitalOceanToken)
 	}
 
