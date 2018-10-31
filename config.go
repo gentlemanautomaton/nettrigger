@@ -3,6 +3,7 @@ package nettrigger
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -14,6 +15,7 @@ type Config struct {
 	Timeout           time.Duration
 	GoogleProject     string
 	DigitalOceanToken string
+	Concurrent        bool
 }
 
 // DefaultConfig holds the default configuration values.
@@ -26,6 +28,7 @@ func (c *Config) ParseEnv() error {
 		googleProject, hasGoogleProject         = os.LookupEnv("GOOGLE_PROJECT")
 		digitalOceanToken, hasDigitalOceanToken = os.LookupEnv("DIGITAL_OCEAN_TOKEN")
 		timeout, hasTimeout                     = os.LookupEnv("TIMEOUT")
+		concurrent, hasConcurrent               = os.LookupEnv("CONCURRENT")
 	)
 
 	if hasGoogleProject {
@@ -42,6 +45,14 @@ func (c *Config) ParseEnv() error {
 			return fmt.Errorf("invalid timeout \"%s\": %v", timeout, err)
 		}
 		c.Timeout = t
+	}
+
+	if hasConcurrent {
+		b, err := strconv.ParseBool(concurrent)
+		if err != nil {
+			return fmt.Errorf("invalid concurrent value \"%s\": %v", concurrent, err)
+		}
+		c.Concurrent = b
 	}
 
 	for i := 1; i < 1000; i++ {

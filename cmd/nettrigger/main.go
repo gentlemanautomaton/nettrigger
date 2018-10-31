@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"sort"
+	"sync"
 	"syscall"
 
 	"github.com/gentlemanautomaton/nettrigger"
@@ -21,10 +22,16 @@ func main() {
 
 	// Parse flags
 	var (
-		debug bool
+		debug      bool
+		concurrent bool
 	)
 	flag.BoolVar(&debug, "debug", false, "print debug messages")
+	flag.BoolVar(&concurrent, "concurrent", false, "carry out actions concurrently")
 	flag.Parse()
+
+	if concurrent {
+		c.Concurrent = true
+	}
 
 	// Parse args
 	args := flag.Args()
@@ -104,15 +111,46 @@ func main() {
 	// Prepare a context
 	ctx := shutdown.Context()
 
-	// Apply matching rules
+	// Process rules in-order unless concurrent processing has been requested
+	if !c.Concurrent {
+		for r, rule := range rules {
+			if rule.Match(env) {
+				for a, action := range rule.Actions {
+					err := action(ctx, env, prov)
+					if err != nil {
+						fmt.Printf("RULE %d ACTION %d: %v\n", r+1, a+1, err)
+					}
+				}
+			}
+		}
+		return
+	}
+
+	// Calculate the number of actions we'll be taking
+	var matched []int
+	var numActions int
 	for r, rule := range rules {
 		if rule.Match(env) {
-			for a, action := range rule.Actions {
+			matched = append(matched, r)
+			numActions += len(rule.Actions)
+		}
+	}
+
+	var wg sync.WaitGroup
+	wg.Add(numActions)
+
+	for _, r := range matched {
+		for a, action := range rules[r].Actions {
+			r, a, action := r, a, action // Preserve values for closure
+			go func() {
+				defer wg.Done()
 				err := action(ctx, env, prov)
 				if err != nil {
 					fmt.Printf("RULE %d ACTION %d: %v\n", r+1, a+1, err)
 				}
-			}
+			}()
 		}
 	}
+
+	wg.Wait()
 }
