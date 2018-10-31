@@ -49,7 +49,9 @@ func (dns digitalOceanDNS) Register(ctx context.Context, domain string, record D
 }
 
 func (dns digitalOceanDNS) existing(ctx context.Context, domain string, record DomainRecord) (id int, ok bool, err error) {
-	opt := &godo.ListOptions{}
+	opt := &godo.ListOptions{
+		PerPage: 200,
+	}
 	for {
 		records, resp, err := dns.c.Domains.Records(ctx, domain, opt)
 		if err != nil {
