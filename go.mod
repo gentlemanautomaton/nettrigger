@@ -1,13 +1,14 @@
 module github.com/gentlemanautomaton/nettrigger
 
-go 1.22
+go 1.23.0
+
 toolchain go1.23.7
 
 require (
 	github.com/digitalocean/godo v1.118.0
 	github.com/gentlemanautomaton/signaler v0.0.0-20180126105343-ab8bba8a505a
 	github.com/gobwas/glob v0.2.3
-	golang.org/x/oauth2 v0.21.0
+	golang.org/x/oauth2 v0.27.0
 	google.golang.org/api v0.188.0
 )
 
