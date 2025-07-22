@@ -2,7 +2,7 @@
 # Stage 1: Retrieve and compile nettrigger
 # --------
 
-FROM golang:1.21 as builder
+FROM golang:1.24 as builder
 
 WORKDIR /app
  
